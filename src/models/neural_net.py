@@ -34,7 +34,7 @@ class NeuralNetWork:
         self.init_optimizer(optimizer)
 
     def init_optimizer(self, optimizer):
-        self.optimizer = optimizer([layer for layer in self.layers if type(layer) == layers.AffineLayer])
+        self.optimizer = optimizer([layer for layer in self.layers if type(layer) == layers.AffineLayer], self.lr)
 
     @staticmethod
     def weight_init(i, o):
@@ -74,6 +74,9 @@ class NeuralNetWork:
         last_type = ""
         if type(self.last_layer) == layers.SoftmaxWithLoss:
             last_type = "sf"
+        elif type(self.last_layer) == layers.MeanSquareLoss:
+            last_type = "ms"
+
         param_dic["last_layer"] = last_type
         for layer in self.layers:
             layer_type = type(layer)
@@ -112,6 +115,8 @@ class NeuralNetWork:
             self.layers.append(obj)
         if param_dic["last_layer"] == "sf":
             self.last_layer = layers.SoftmaxWithLoss()
+        elif param_dic["last_layer"] == "ms":
+            self.last_layer = layers.MeanSquareLoss()
 
     def batch_train(self, x, t, epochs=5):
         x = self.standardization(x)
