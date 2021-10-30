@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 class NeuralNetWork:
     def __init__(self, lr=0.01, batch_size=300, input_size=None, hidden_size=None, output_size=None, depth=0,
                  weight_init_std=0.01,
-                 load_nn_name=None, optimizer=optimizers.SGD):
+                 load_nn_name=None, activation_function=layers.SigmoidLayer, optimizer=optimizers.SGD):
         self.layers = []
         self.lr = lr
         self.batch_size = batch_size
@@ -22,14 +22,14 @@ class NeuralNetWork:
         self.weight_init_std = weight_init_std
         self.layers.append(layers.AffineLayer(self.weight_init(input_size, hidden_size), np.zeros(hidden_size)))
         # self.layers.append(layers.BatchNorm())
-        self.layers.append(layers.SigmoidLayer())
+        self.layers.append(activation_function())
         for i in range(depth):
             self.layers.append(layers.AffineLayer(self.weight_init(hidden_size, hidden_size), np.zeros(hidden_size)))
             # self.layers.append(layers.BatchNorm())
-            self.layers.append(layers.SigmoidLayer())
+            self.layers.append(activation_function())
         self.layers.append(layers.AffineLayer(self.weight_init(hidden_size, output_size), np.zeros(output_size)))
         # self.layers.append(layers.BatchNorm())
-        self.layers.append(layers.SigmoidLayer())
+        self.layers.append(activation_function())
         self.last_layer = layers.MeanSquareLoss()
         self.init_optimizer(optimizer)
 
@@ -128,7 +128,6 @@ class NeuralNetWork:
                 self.train(data, target)
         plt.plot(np.arange(len(self.loss_list)), self.loss_list)
         plt.show()
-        print(self.loss_list)
 
     @staticmethod
     def standardization(x):
