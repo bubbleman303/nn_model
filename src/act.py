@@ -1,10 +1,10 @@
 from src.models.neural_net import NeuralNetWork
 from src.conf import config
-from src.models import optimizers
+from src.models import optimizers, layers
 import numpy as np
 
 nn = NeuralNetWork(input_size=784, hidden_size=100, output_size=10, depth=0, batch_size=60, lr=0.3,
-                   optimizer=optimizers.SGD)
+                   optimizer=optimizers.SGD, activation_function=layers.ReluLayer, loss_function=layers.MeanSquareLoss)
 
 # nn = NeuralNetWork(load_nn_name="mnist")
 train_value = np.load(config.TRAIN_DATA_DIR.format("mnist/mnist_train_i.npy"))

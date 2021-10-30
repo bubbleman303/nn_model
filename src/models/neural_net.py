@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 class NeuralNetWork:
     def __init__(self, lr=0.01, batch_size=300, input_size=None, hidden_size=None, output_size=None, depth=0,
                  weight_init_std=0.01,
-                 load_nn_name=None, activation_function=layers.SigmoidLayer, optimizer=optimizers.SGD):
+                 load_nn_name=None, activation_function=layers.SigmoidLayer, optimizer=optimizers.SGD,loss_function=layers.MeanSquareLoss):
         self.layers = []
         self.lr = lr
         self.batch_size = batch_size
@@ -30,7 +30,7 @@ class NeuralNetWork:
         self.layers.append(layers.AffineLayer(self.weight_init(hidden_size, output_size), np.zeros(output_size)))
         # self.layers.append(layers.BatchNorm())
         self.layers.append(activation_function())
-        self.last_layer = layers.MeanSquareLoss()
+        self.last_layer = loss_function()
         self.init_optimizer(optimizer)
 
     def init_optimizer(self, optimizer):
