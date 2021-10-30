@@ -106,3 +106,16 @@ class MeanSquareLoss:
 
     def backward(self, d_out=1):
         return -d_out * (self.t - self.x) * self.x / self.x.shape[0]
+
+
+class BatchNorm:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def forward(x):
+        return (x - np.mean(x)) / np.std(x)
+
+    @staticmethod
+    def backward(d_out):
+        return d_out

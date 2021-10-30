@@ -19,12 +19,15 @@ class NeuralNetWork:
             return
         self.weight_init_std = weight_init_std
         self.layers.append(layers.AffineLayer(self.weight_init(input_size, hidden_size), np.zeros(hidden_size)))
+        # self.layers.append(layers.BatchNorm())
         self.layers.append(layers.SigmoidLayer())
         for i in range(depth):
             self.layers.append(layers.AffineLayer(self.weight_init(hidden_size, hidden_size), np.zeros(hidden_size)))
+            # self.layers.append(layers.BatchNorm())
             self.layers.append(layers.SigmoidLayer())
         self.layers.append(layers.AffineLayer(self.weight_init(hidden_size, output_size), np.zeros(output_size)))
-        self.layers.append(layers.ReluLayer())
+        # self.layers.append(layers.BatchNorm())
+        self.layers.append(layers.SigmoidLayer())
         self.last_layer = layers.MeanSquareLoss()
 
     @staticmethod
@@ -41,7 +44,9 @@ class NeuralNetWork:
         return self.last_layer.forward(y, t)
 
     def accuracy(self, x, t):
+        x = self.standardization(x)
         y = self.predict(x)
+        print(y)
         y = np.argmax(y, axis=1)
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
