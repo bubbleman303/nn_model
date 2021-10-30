@@ -7,8 +7,9 @@ import numpy as np
 #                    optimizer=optimizers.SGD)
 
 nn = NeuralNetWork(load_nn_name="mnist")
-train_value = np.load(config.TRAIN_DATA_DIR.format("mnist/mnist_test_i.npy"))
-train_label = np.load(config.TRAIN_DATA_DIR.format("mnist/mnist_test_t.npy"))
-# nn.batch_train(train_value, train_label, epochs=10)
+train_value = np.load(config.TRAIN_DATA_DIR.format("mnist/mnist_train_i.npy"))
+train_label = np.load(config.TRAIN_DATA_DIR.format("mnist/mnist_train_t.npy"))
 acc = nn.accuracy(train_value, train_label)
-print(acc)
+nn.batch_train(train_value, train_label, epochs=10)
+if nn.accuracy(train_value, train_label) > acc:
+    nn.save_nn("mnist")

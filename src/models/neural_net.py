@@ -52,7 +52,6 @@ class NeuralNetWork:
     def accuracy(self, x, t):
         x = self.standardization(x)
         y = self.predict(x)
-        print(y)
         y = np.argmax(y, axis=1)
         if t.ndim != 1:
             t = np.argmax(t, axis=1)
